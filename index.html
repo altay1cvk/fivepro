@@ -1,0 +1,2845 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#2C5AFF">
+    <title>FivePro</title>
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Variables CSS pour une personnalisation facile */
+        :root {
+            --primary-color: #2C5AFF;
+            --secondary-color: #4C72FF;
+            --accent-color: #FF5E3A;
+            --dark-bg: #121212;
+            --card-bg: rgba(30, 30, 34, 0.95);
+            --surface-bg: rgba(45, 45, 48, 0.8);
+            --text-color: #ffffff;
+            --text-secondary: #B0B0B8;
+            --danger-color: #FF453A;
+            --success-color: #32D74B;
+            --warning-color: #FFD60A;
+            --border-radius: 16px;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            --anim-speed: 0.3s;
+        }
+        
+        /* Reset moderne */
+        *, *::before, *::after { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Styles de base */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--dark-bg); 
+            color: var(--text-color);
+            height: 100vh;
+            width: 100%;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.5;
+        }
+        
+        /* Animations pour effet natif */
+        .fade-in {
+            animation: fadeIn var(--anim-speed) ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* En-tête de style iOS moderne */
+        .ios-header {
+            background-color: rgba(18, 18, 18, 0.85);
+            padding: 16px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 18px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .ios-header .back-button {
+            position: absolute;
+            left: 16px;
+            font-size: 16px;
+            display: none;
+        }
+        
+        /* Navigation inférieure de style iOS modernisée */
+        .ios-tab-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: rgba(25, 25, 28, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            position: fixed;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            padding: 12px 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 0;
+            width: 20%;
+            font-size: 11px;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        
+        .tab-item i {
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+        
+        .tab-item.active {
+            color: var(--primary-color);
+            transform: translateY(-4px);
+        }
+        
+        .tab-item:active {
+            transform: scale(0.95);
+        }
+        
+        /* Conteneur principal avec padding adapté */
+        main {
+            padding: 70px 16px 100px;
+            height: 100%;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Cartes de style iOS moderne */
+        .ios-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .ios-card:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Formulaires de style iOS moderne */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .ios-input {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--surface-bg);
+            border: none;
+            border-radius: 12px;
+            color: var(--text-color);
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+        
+        .ios-input:focus {
+            background-color: rgba(60, 60, 65, 0.9);
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+        
+        /* Boutons de style iOS moderne */
+        .ios-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            margin-top: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(44, 90, 255, 0.3);
+        }
+        
+        .ios-button:active {
+            background-color: var(--secondary-color);
+            transform: scale(0.98);
+            box-shadow: 0 1px 4px rgba(44, 90, 255, 0.2);
+        }
+        
+        .ios-button.secondary {
+            background-color: rgba(80, 80, 90, 0.4);
+            box-shadow: none;
+        }
+        
+        .ios-button.secondary:active {
+            background-color: rgba(90, 90, 100, 0.5);
+        }
+        
+        .ios-button.accent {
+            background-color: var(--accent-color);
+            box-shadow: 0 2px 8px rgba(255, 94, 58, 0.3);
+        }
+        
+        .ios-button.accent:active {
+            background-color: #FF7952;
+        }
+        
+        /* Sections avec transition */
+        section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+            min-height: calc(100vh - 170px);
+        }
+        
+        section.active {
+            display: block;
+        }
+        
+        /* Titres modernisés */
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), #8A96FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        
+        h2 {
+            font-size: 22px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        
+        h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        /* Styles pour l'accueil amélioré */
+        .welcome-msg {
+            text-align: center;
+            margin-bottom: 24px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .event-item {
+            background-color: var(--surface-bg);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: transform 0.2s ease;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .event-item:active {
+            transform: translateX(5px);
+        }
+
+        .event-date {
+            font-size: 14px;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .event-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .event-location {
+            color: var(--text-secondary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .event-location i {
+            margin-right: 6px;
+        }
+
+        /* Liste de membres d'équipe modernisée */
+        .team-list {
+            list-style: none;
+            margin-top: 16px;
+        }
+        
+        .team-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px;
+            border-radius: 12px;
+            background-color: var(--surface-bg);
+            margin-bottom: 10px;
+            transition: transform 0.2s ease;
+        }
+        
+        .team-list li:active {
+            transform: scale(0.98);
+        }
+        
+        .team-list li .name {
+            font-weight: 500;
+        }
+        
+        .remove-btn {
+            background-color: rgba(255, 69, 58, 0.15);
+            border: none;
+            color: var(--danger-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .remove-btn:active {
+            background-color: rgba(255, 69, 58, 0.25);
+        }
+        
+        /* Team Grid amélioré */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .team-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .team-card:active {
+            transform: scale(0.95);
+        }
+        
+        .team-card h3 {
+            color: var(--text-color);
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .team-card .members {
+            font-size: 14px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .team-card .members i {
+            margin-right: 6px;
+            color: var(--secondary-color);
+        }
+
+        /* Toast notifications améliorées */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 16px;
+            right: 16px;
+            background-color: rgba(50, 215, 75, 0.9);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-align: center;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast.error {
+            background-color: rgba(255, 69, 58, 0.9);
+        }
+
+        /* Classes utilitaires */
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-16 {
+            margin-bottom: 16px;
+        }
+
+        .mt-16 {
+            margin-top: 16px;
+        }
+
+        /* Animations pour engagement utilisateur */
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        /* Modernisation section paris */
+        .bet-card {
+            background-color: var(--surface-bg);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 16px;
+            position: relative;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .bet-title {
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        
+        .bet-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .bet-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background-color: rgba(50, 215, 75, 0.15);
+            color: var(--success-color);
+        }
+        
+        .status-pending {
+            background-color: rgba(255, 214, 10, 0.15);
+            color: var(--warning-color);
+        }
+
+        /* Champ de recherche moderne */
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            background-color: var(--surface-bg);
+            border: none;
+            border-radius: 12px;
+            color: var(--text-color);
+            font-size: 16px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* FAB Button */
+        .fab-button {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            background-color: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(255, 94, 58, 0.4);
+            z-index: 99;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .fab-button i {
+            font-size: 24px;
+        }
+
+        .fab-button:active {
+            transform: scale(0.9);
+            background-color: #FF7952;
+        }
+
+        /* Progress steps */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: "";
+            position: absolute;
+            top: 14px;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background-color: var(--surface-bg);
+            z-index: 1;
+        }
+
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+            background-color: var(--surface-bg);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .step.completed {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        /* Modal moderne */
+        .ios-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: var(--shadow);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        /* Skeleton loader */
+        .skeleton {
+            background: linear-gradient(90deg, var(--surface-bg) 25%, rgba(60, 60, 65, 0.5) 50%, var(--surface-bg) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 8px;
+            height: 24px;
+            margin-bottom: 8px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-card {
+            padding: 16px;
+            border-radius: 12px;
+            background-color: var(--surface-bg);
+            margin-bottom: 16px;
+        }
+
+        .skeleton.title {
+            height: 24px;
+            width: 80%;
+            margin-bottom: 16px;
+        }
+
+        .skeleton.text {
+            height: 16px;
+            width: 100%;
+        }
+
+        .skeleton.button {
+            height: 48px;
+            margin-top: 16px;
+        }
+
+        /* Stats des équipes */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .stat-box {
+            background-color: var(--surface-bg);
+            border-radius: 12px;
+            padding: 16px 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Système de partage de frais */
+        .result-box {
+            background-color: var(--surface-bg);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: center;
+        }
+
+        /* Système de remplaçants */
+        .badge-urgent {
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-left: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        /* Prévisions météo */
+        .weather-forecast {
+            text-align: center;
+            padding: 16px;
+        }
+
+        .weather-icon {
+            margin-bottom: 12px;
+            color: var(--primary-color);
+        }
+
+        .weather-temp {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .weather-desc {
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .weather-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* Responsive improvements */
+        @media (min-width: 768px) {
+            .team-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .ios-card {
+                padding: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="ios-header">
+        <a href="#" class="back-button" id="backButton"><i class="fas fa-chevron-left"></i></a>
+        <span id="pageTitle">FivePro</span>
+    </header>
+    
+    <main id="appContent">
+        <!-- Section Accueil -->
+        <section id="home" class="active">
+            <h1>FivePro</h1>
+            <p class="welcome-msg">La meilleure façon d'organiser vos matchs de foot à 5.</p>
+            
+            <div class="ios-card fade-in">
+                <h3>Inscription Capitaine</h3>
+                <div class="form-group">
+                    <label for="captainName">Nom du Capitaine</label>
+                    <input type="text" id="captainName" class="ios-input" placeholder="Votre nom" required>
+                </div>
+                <div class="form-group">
+                    <label for="captainPassword">Mot de passe</label>
+                    <input type="password" id="captainPassword" class="ios-input" placeholder="Votre mot de passe" required>
+                </div>
+                <button id="registerCaptainBtn" class="ios-button pulse-animation">Commencer l'aventure</button>
+                <p id="registrationMessage" style="text-align: center; margin-top: 12px;"></p>
+            </div>
+            
+            <div class="ios-card fade-in">
+                <h3>Événements à venir</h3>
+                <div id="upcomingEvents">
+                    <!-- Skeleton loader -->
+                    <div class="skeleton-card">
+                        <div class="skeleton title"></div>
+                        <div class="skeleton text"></div>
+                        <div class="skeleton text" style="width: 60%"></div>
+                    </div>
+                    <div class="skeleton-card">
+                        <div class="skeleton title"></div>
+                        <div class="skeleton text"></div>
+                        <div class="skeleton text" style="width: 60%"></div>
+                    </div>
+                </div>
+                <button id="refreshEventsBtn" class="ios-button secondary mt-16">
+                    <i class="fas fa-sync-alt"></i> Actualiser
+                </button>
+            </div>
+        </section>
+        
+        <!-- Section Créer -->
+        <section id="create">
+            <h1>Créer un Événement</h1>
+            
+            <div class="progress-steps">
+                <div class="step active">1</div>
+                <div class="step">2</div>
+                <div class="step">3</div>
+            </div>
+            
+            <div class="ios-card">
+                <h3 class="mb-16">Informations de base</h3>
+                
+                <div class="form-group">
+                    <label for="eventType">Type d'événement</label>
+                    <select id="eventType" class="ios-input">
+                        <option value="five">Five (match simple)</option>
+                        <option value="tournament">Tournoi</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="fiveOptions">
+                    <label for="playersPerTeam">Joueurs par équipe</label>
+                    <select id="playersPerTeam" class="ios-input">
+                        <option value="4">4 vs 4</option>
+                        <option value="5" selected>5 vs 5</option>
+                        <option value="6">6 vs 6</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="tournamentOptions" style="display: none;">
+                    <label for="numTeams">Nombre d'équipes</label>
+                    <input type="number" id="numTeams" class="ios-input" min="2" max="16" value="4">
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventName">Nom de l'événement</label>
+                    <input type="text" id="eventName" class="ios-input" placeholder="Ex: Five du vendredi" required>
+                </div>
+                
+                <div class="button-group">
+                    <button id="nextStep1Btn" class="ios-button">Continuer</button>
+                </div>
+            </div>
+            
+            <div class="ios-card" id="createStep2" style="display: none;">
+                <h3 class="mb-16">Date et lieu</h3>
+                
+                <div class="form-group">
+                    <label for="eventDate">Date</label>
+                    <input type="date" id="eventDate" class="ios-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventTime">Heure</label>
+                    <input type="time" id="eventTime" class="ios-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventLocation">Lieu</label>
+                    <input type="text" id="eventLocation" class="ios-input" placeholder="Ex: Stade Municipal" required>
+                </div>
+                
+                <div class="button-group">
+                    <button id="prevStep2Btn" class="ios-button secondary">Retour</button>
+                    <button id="nextStep2Btn" class="ios-button">Continuer</button>
+                </div>
+            </div>
+            
+            <div class="ios-card" id="createStep3" style="display: none;">
+                <h3 class="mb-16">Finaliser</h3>
+                
+                <div id="eventSummary" class="mb-16">
+                    <p><strong>Type:</strong> <span id="summaryType"></span></p>
+                    <p><strong>Nom:</strong> <span id="summaryName"></span></p>
+                    <p><strong>Date:</strong> <span id="summaryDate"></span></p>
+                    <p><strong>Heure:</strong> <span id="summaryTime"></span></p>
+                    <p><strong>Lieu:</strong> <span id="summaryLocation"></span></p>
+                </div>
+                
+                <div class="button-group">
+                    <button id="prevStep3Btn" class="ios-button secondary">Retour</button>
+                    <button id="createEventBtn" class="ios-button accent">Créer l'événement</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section Équipes -->
+        <section id="teams">
+            <h1>Mes Équipes</h1>
+            
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="teamSearchInput" class="search-input" placeholder="Rechercher une équipe...">
+            </div>
+            
+            <div class="team-grid" id="teamGrid">
+                <!-- Skeleton loaders -->
+                <div class="team-card skeleton-loader">
+                    <div class="skeleton title"></div>
+                    <div class="skeleton text"></div>
+                </div>
+                <div class="team-card skeleton-loader">
+                    <div class="skeleton title"></div>
+                    <div class="skeleton text"></div>
+                </div>
+            </div>
+            
+            <div class="ios-card" id="createTeamForm" style="display: none;">
+                <h3>Créer une Équipe</h3>
+                <div class="form-group">
+                    <label for="teamName">Nom de l'équipe</label>
+                    <input type="text" id="teamName" class="ios-input" placeholder="Ex: Les Invincibles" required>
+                </div>
+                <div class="form-group">
+                    <label for="teamColor">Couleur de l'équipe</label>
+                    <select id="teamColor" class="ios-input">
+                        <option value="blue">Bleu</option>
+                        <option value="red">Rouge</option>
+                        <option value="green">Vert</option>
+                        <option value="yellow">Jaune</option>
+                        <option value="white">Blanc</option>
+                        <option value="black">Noir</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button id="cancelTeamBtn" class="ios-button secondary">Annuler</button>
+                    <button id="createTeamBtn" class="ios-button">Créer l'équipe</button>
+                </div>
+            </div>
+            
+            <div class="fab-button" id="showCreateTeamFormBtn">
+                <i class="fas fa-plus"></i>
+            </div>
+        </section>
+        
+        <!-- Section Détails d'équipe -->
+        <section id="teamDetail">
+            <div class="ios-card">
+                <h2 id="detailTeamName"></h2>
+                <p><strong>Membres:</strong> <span id="memberCount"></span></p>
+                
+                <div class="form-group" style="margin-top: 20px;">
+                    <label for="addMemberInput">Ajouter un membre</label>
+                    <div style="display: flex;">
+                        <input type="text" id="addMemberInput" class="ios-input" placeholder="Nom du joueur" style="border-radius: 12px 0 0 12px;">
+                        <button id="addMemberBtn" class="ios-button" style="width: auto; margin-top: 0; border-radius: 0 12px 12px 0;">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ios-card">
+                <h3>Membres de l'équipe</h3>
+                <ul id="teamMembersList" class="team-list">
+                    <!-- Les membres seront listés ici -->
+                </ul>
+            </div>
+            
+            <div class="ios-card">
+                <h3>Statistiques de l'équipe</h3>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-value" id="team-matches">0</span>
+                        <span class="stat-label">Matchs</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-value" id="team-wins">0</span>
+                        <span class="stat-label">Victoires</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-value" id="team-goals">0</span>
+                        <span class="stat-label">Buts</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section Détails d'événement -->
+        <section id="eventDetails">
+            <div class="ios-card">
+                <h2 id="detailEventName"></h2>
+                <p><i class="fas fa-trophy"></i> <strong>Type:</strong> <span id="detailEventType"></span></p>
+                <p><i class="fas fa-users"></i> <strong>Joueurs par équipe:</strong> <span id="detailPlayersPerTeam"></span></p>
+                <p><i class="far fa-calendar"></i> <strong>Date:</strong> <span id="detailEventDate"></span></p>
+                <p><i class="far fa-clock"></i> <strong>Heure:</strong> <span id="detailEventTime"></span></p>
+                <p><i class="fas fa-map-marker-alt"></i> <strong>Lieu:</strong> <span id="detailEventLocation"></span></p>
+                
+                <div class="button-group">
+                    <button id="joinEventBtn" class="ios-button">Rejoindre</button>
+                    <button id="addToCalendarBtn" class="ios-button secondary">
+                        <i class="far fa-calendar-plus"></i> Ajouter au calendrier
+                    </button>
+                    <button id="shareBtn" class="ios-button secondary">
+                        <i class="fas fa-share-alt"></i> Partager
+                    </button>
+                </div>
+            </div>
+            
+            <div class="ios-card">
+                <h3>Équipes participantes</h3>
+                <ul id="eventTeamsList" class="team-list">
+                    <!-- Les équipes seront listées ici -->
+                </ul>
+            </div>
+            
+            <div class="ios-card">
+                <h3>Besoin d'un remplaçant?</h3>
+                <p>Un joueur ne peut pas venir? Envoyez une alerte aux joueurs disponibles.</p>
+                <button id="findReplacementBtn" class="ios-button">
+                    <i class="fas fa-user-plus"></i> Trouver des remplaçants
+                </button>
+            </div>
+            
+            <div class="ios-card">
+                <h3>Météo prévue</h3>
+                <div id="weatherForecast" class="weather-forecast">
+                    <div class="weather-icon">
+                        <i class="fas fa-cloud-sun fa-3x"></i>
+                    </div>
+                    <div class="weather-temp">18°C</div>
+                    <div class="weather-desc">Partiellement nuageux</div>
+                    <div class="weather-info">
+                        <span><i class="fas fa-wind"></i> 10 km/h</span>
+                        <span><i class="fas fa-tint"></i> 20%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section Partage de frais -->
+        <section id="splitPayment">
+            <h1>Partager les frais</h1>
+            
+            <div class="ios-card">
+                <h3>Calculateur de frais</h3>
+                <div class="form-group">
+                    <label for="totalAmount">Coût total (€)</label>
+                    <input type="number" id="totalAmount" class="ios-input" min="0" value="50">
+                </div>
+                <div class="form-group">
+                    <label for="playerCount">Nombre de joueurs</label>
+                    <input type="number" id="playerCount" class="ios-input" min="2" value="10">
+                </div>
+                <div class="result-box">
+                    <p>Chaque joueur doit payer: <strong id="amountPerPlayer">5.00€</strong></p>
+                </div>
+                <button id="shareCostBtn" class="ios-button">
+                    <i class="fas fa-share-alt"></i> Partager ce calcul
+                </button>
+            </div>
+            
+            <div class="ios-card">
+                <h3>Options supplémentaires</h3>
+                <div class="form-group">
+                    <label>Méthode de partage</label>
+                    <select id="splitMethod" class="ios-input">
+                        <option value="equal">Parts égales</option>
+                        <option value="custom">Parts personnalisées</option>
+                    </select>
+                </div>
+                <div id="customSplitContainer" style="display: none;">
+                    <!-- Options de partage personnalisées ajoutées dynamiquement -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- GeoMatch - Terrains à proximité -->
+        <section id="fields">
+            <h1>Terrains à proximité</h1>
+            <div class="ios-card">
+                <div id="map-container" style="height: 300px; border-radius: 12px; overflow: hidden;"></div>
+                <button id="findNearbyFieldsBtn" class="ios-button mt-16">
+                    <i class="fas fa-location-arrow"></i> Trouver les terrains
+                </button>
+            </div>
+            
+            <div class="ios-card" id="fieldsResults" style="display: none;">
+                <h3>Terrains disponibles</h3>
+                <div id="nearby-fields-list">
+                    <!-- Les terrains seront listés ici -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tactiques simplifiées -->
+        <section id="tactics">
+            <h1>Tactiques d'équipe</h1>
+            
+            <div class="ios-card">
+                <div id="tactics-field" style="height: 400px; background-color: #3a6e3a; position: relative; border-radius: 12px; overflow: hidden;">
+                    <!-- Le terrain sera dessiné ici -->
+                    <canvas id="tactics-canvas" width="300" height="400" style="width: 100%; height: 100%;"></canvas>
+                </div>
+                
+                <div style="margin-top: 16px; display: flex; justify-content: center; gap: 12px;">
+                    <select id="tactics-formation" class="ios-input" style="width: auto; padding: 12px 16px;">
+                        <option value="4-4-2">4-4-2</option>
+                        <option value="4-3-3">4-3-3</option>
+                        <option value="3-5-2">3-5-2</option>
+                        <option value="5-3-2">5-3-2</option>
+                    </select>
+                    <button id="save-tactics" class="ios-button" style="width: auto; padding: 12px 16px;">
+                        <i class="fas fa-save"></i> Sauvegarder
+                    </button>
+                </div>
+            </div>
+            
+            <div class="ios-card">
+                <h3>Instructions</h3>
+                <ul style="padding-left: 20px; line-height: 1.6;">
+                    <li>Choisissez une formation dans le menu déroulant</li>
+                    <li>Déplacez les joueurs en les faisant glisser</li>
+                    <li>Sauvegardez pour l'utiliser lors de votre prochain match</li>
+                </ul>
+            </div>
+            
+            <div class="ios-card">
+                <h3>Formations sauvegardées</h3>
+                <div id="saved-formations" class="team-list">
+                    <!-- Les formations sauvegardées seront listées ici -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Paris simplifiés -->
+        <section id="predictions">
+            <h1>Prédictions de matchs</h1>
+            
+            <div class="ios-card">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="predictionEventSearchInput" class="search-input" placeholder="Rechercher un événement...">
+                </div>
+                
+                <h3>Événements à venir</h3>
+                <div id="prediction-events-list">
+                    <!-- Les événements seront listés ici -->
+                </div>
+            </div>
+            
+            <div class="ios-card">
+                <h3>Mes prédictions</h3>
+                <div id="user-predictions-list">
+                    <!-- Les prédictions seront listées ici -->
+                </div>
+            </div>
+            
+            <div class="ios-card">
+                <h3>Classement des prédictions</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">Joueur</th>
+                            <th style="text-align: center; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">Score</th>
+                            <th style="text-align: right; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">Justes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prediction-leaderboard-body">
+                        <!-- Le classement sera listé ici -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    
+    <nav class="ios-tab-bar">
+        <a href="#home" class="tab-item active" data-section="home">
+            <i class="fas fa-home"></i>
+            <span>Accueil</span>
+        </a>
+        <a href="#create" class="tab-item" data-section="create">
+            <i class="fas fa-plus"></i>
+            <span>Créer</span>
+        </a>
+        <a href="#teams" class="tab-item" data-section="teams">
+            <i class="fas fa-users"></i>
+            <span>Équipes</span>
+        </a>
+        <a href="#fields" class="tab-item" data-section="fields">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Terrains</span>
+        </a>
+        <a href="#tactics" class="tab-item" data-section="tactics">
+            <i class="fas fa-gamepad"></i>
+            <span>Tactiques</span>
+        </a>
+        <a href="#splitPayment" class="tab-item" data-section="splitPayment">
+            <i class="fas fa-euro-sign"></i>
+            <span>Frais</span>
+        </a>
+        <a href="#predictions" class="tab-item" data-section="predictions">
+            <i class="fas fa-chart-line"></i>
+            <span>Prédictions</span>
+        </a>
+    </nav>
+    
+    <div id="toast" class="toast"></div>
+    
+    <script>
+        // Application JavaScript optimisée
+        document.addEventListener('DOMContentLoaded', function() {
+            // STRUCTURES DE DONNÉES
+            class DataManager {
+                static STORAGE_KEY = 'fiveApp';
+                
+                static load() {
+                    try {
+                        const data = localStorage.getItem(this.STORAGE_KEY);
+                        return data ? JSON.parse(data) : { 
+                            events: {}, 
+                            teams: {}, 
+                            captain: null,
+                            predictions: {},
+                            userPoints: {},
+                            formations: {},
+                            reminders: {},
+                            offlineQueue: []
+                        };
+                    } catch (e) {
+                        console.error('Erreur lors du chargement des données:', e);
+                        return { 
+                            events: {}, 
+                            teams: {}, 
+                            captain: null,
+                            predictions: {},
+                            userPoints: {},
+                            formations: {},
+                            reminders: {},
+                            offlineQueue: []
+                        };
+                    }
+                }
+                
+                static save(data) {
+                    try {
+                        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+                        
+                        // Si on est hors ligne, stocker dans la file d'attente
+                        if (!navigator.onLine) {
+                            this.saveOffline(data);
+                        }
+                        
+                        return true;
+                    } catch (e) {
+                        console.error('Erreur lors de la sauvegarde des données:', e);
+                        showToast('Erreur lors de la sauvegarde des données', true);
+                        return false;
+                    }
+                }
+                
+                static saveOffline(data) {
+                    try {
+                        const queue = data.offlineQueue || [];
+                        const action = {
+                            type: 'save',
+                            data: data,
+                            timestamp: new Date().toISOString()
+                        };
+                        queue.push(action);
+                        data.offlineQueue = queue;
+                        localStorage.setItem(this.STORAGE_KEY + '_offline', JSON.stringify(data));
+                    } catch (e) {
+                        console.error('Erreur lors de la sauvegarde hors ligne:', e);
+                    }
+                }
+                
+                static syncWhenOnline() {
+                    window.addEventListener('online', () => {
+                        const offlineData = localStorage.getItem(this.STORAGE_KEY + '_offline');
+                        if (offlineData) {
+                            // Dans une vraie application, on enverrait les données au serveur
+                            showToast('Synchronisation des données...');
+                            
+                            setTimeout(() => {
+                                localStorage.removeItem(this.STORAGE_KEY + '_offline');
+                                showToast('Données synchronisées avec succès!');
+                            }, 1500);
+                        }
+                    });
+                }
+                
+                static generateId() {
+                    return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+                }
+            }
+            
+            // GESTIONNAIRES
+            class CaptainManager {
+                static register(name, password) {
+                    const data = DataManager.load();
+                    if (data.captain) {
+                        return { success: false, message: 'Un capitaine est déjà inscrit.' };
+                    }
+                    
+                    // En production, il faudrait hasher le mot de passe
+                    data.captain = { name, password };
+                    
+                    // Initialiser les points pour le système de prédictions
+                    if (!data.userPoints) data.userPoints = {};
+                    data.userPoints[name] = {
+                        total: 100, // Score de départ
+                        won: 0,
+                        lost: 0,
+                        correctPredictions: 0
+                    };
+                    
+                    DataManager.save(data);
+                    return { success: true };
+                }
+                
+                static isLoggedIn() {
+                    const data = DataManager.load();
+                    return !!data.captain;
+                }
+            }
+            
+            class EventManager {
+                static create(eventData) {
+                    const data = DataManager.load();
+                    const eventId = DataManager.generateId();
+                    data.events[eventId] = { 
+                        ...eventData, 
+                        id: eventId, 
+                        teams: [],
+                        createdAt: new Date().toISOString()
+                    };
+                    DataManager.save(data);
+                    
+                    // Programmer un rappel automatique
+                    NotificationManager.scheduleReminder(eventId);
+                    
+                    return eventId;
+                }
+                
+                static get(eventId) {
+                    const data = DataManager.load();
+                    return data.events[eventId];
+                }
+                
+                static getAll() {
+                    const data = DataManager.load();
+                    return data.events;
+                }
+                
+                static addTeam(eventId, teamId) {
+                    const data = DataManager.load();
+                    if (!data.events[eventId]) {
+                        return { success: false, message: "L'événement n'existe pas." };
+                    }
+                    
+                    if (data.events[eventId].teams.includes(teamId)) {
+                        return { success: false, message: "L'équipe est déjà inscrite à cet événement." };
+                    }
+                    
+                    data.events[eventId].teams.push(teamId);
+                    DataManager.save(data);
+                    return { success: true };
+                }
+                
+                static recordResult(eventId, winners, scores) {
+                    const data = DataManager.load();
+                    if (!data.events[eventId]) {
+                        return { success: false, message: "L'événement n'existe pas." };
+                    }
+                    
+                    data.events[eventId].result = {
+                        winners,
+                        scores,
+                        recordedAt: new Date().toISOString()
+                    };
+                    
+                    // Mettre à jour les statistiques des équipes
+                    winners.forEach(teamId => {
+                        if (data.teams[teamId]) {
+                            if (!data.teams[teamId].stats) {
+                                data.teams[teamId].stats = {
+                                    matches: 0,
+                                    wins: 0,
+                                    goals: 0
+                                };
+                            }
+                            data.teams[teamId].stats.matches = (data.teams[teamId].stats.matches || 0) + 1;
+                            data.teams[teamId].stats.wins = (data.teams[teamId].stats.wins || 0) + 1;
+                            
+                            // Ajouter les buts si disponibles
+                            if (scores && scores[teamId]) {
+                                data.teams[teamId].stats.goals = (data.teams[teamId].stats.goals || 0) + scores[teamId];
+                            }
+                        }
+                    });
+                    
+                    // Ajouter une partie jouée pour les équipes perdantes
+                    data.events[eventId].teams.forEach(teamId => {
+                        if (!winners.includes(teamId) && data.teams[teamId]) {
+                            if (!data.teams[teamId].stats) {
+                                data.teams[teamId].stats = {
+                                    matches: 0,
+                                    wins: 0,
+                                    goals: 0
+                                };
+                            }
+                            data.teams[teamId].stats.matches = (data.teams[teamId].stats.matches || 0) + 1;
+                            
+                            // Ajouter les buts si disponibles
+                            if (scores && scores[teamId]) {
+                                data.teams[teamId].stats.goals = (data.teams[teamId].stats.goals || 0) + scores[teamId];
+                            }
+                        }
+                    });
+                    
+                    // Vérifier et récompenser les prédictions
+                    PredictionSystem.resolvePredictions(eventId, winners[0]);
+                    
+                    DataManager.save(data);
+                    return { success: true };
+                }
+            }
+            
+            class TeamManager {
+                static create(teamName, teamColor = 'blue') {
+                    const data = DataManager.load();
+                    const teamId = DataManager.generateId();
+                    data.teams[teamId] = { 
+                        id: teamId, 
+                        name: teamName,
+                        color: teamColor,
+                        members: [],
+                        stats: {
+                            matches: 0,
+                            wins: 0,
+                            goals: 0
+                        },
+                        createdAt: new Date().toISOString()
+                    };
+                    DataManager.save(data);
+                    return teamId;
+                }
+                
+                static get(teamId) {
+                    const data = DataManager.load();
+                    return data.teams[teamId];
+                }
+                
+                static getAll() {
+                    const data = DataManager.load();
+                    return data.teams;
+                }
+                
+                static addMember(teamId, memberName) {
+                    const data = DataManager.load();
+                    if (!data.teams[teamId]) {
+                        return { success: false, message: "L'équipe n'existe pas." };
+                    }
+                    
+                    if (data.teams[teamId].members.includes(memberName)) {
+                        return { success: false, message: 'Ce joueur est déjà dans l\'équipe.' };
+                    }
+                    
+                    data.teams[teamId].members.push(memberName);
+                    DataManager.save(data);
+                    return { success: true };
+                }
+                
+                static removeMember(teamId, memberName) {
+                    const data = DataManager.load();
+                    if (!data.teams[teamId]) {
+                        return { success: false, message: "L'équipe n'existe pas." };
+                    }
+                    
+                    data.teams[teamId].members = data.teams[teamId].members.filter(m => m !== memberName);
+                    DataManager.save(data);
+                    return { success: true };
+                }
+            }
+            
+            // NOUVELLES FONCTIONNALITÉS
+            class NotificationManager {
+                static scheduleReminder(eventId, hours = 24) {
+                    const event = EventManager.get(eventId);
+                    if (!event) return false;
+                    
+                    const eventDate = new Date(`${event.date}T${event.time}`);
+                    const reminderDate = new Date(eventDate.getTime() - hours * 60 * 60 * 1000);
+                    
+                    const data = DataManager.load();
+                    if (!data.reminders) data.reminders = {};
+                    
+                    data.reminders[eventId] = {
+                        eventId,
+                        reminderDate: reminderDate.toISOString(),
+                        eventDate: eventDate.toISOString(),
+                        sent: false
+                    };
+                    
+                    DataManager.save(data);
+                    
+                    // Demander l'autorisation pour les notifications
+                    if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                        Notification.requestPermission();
+                    }
+                    
+                    return true;
+                }
+                
+                static checkReminders() {
+                    const data = DataManager.load();
+                    if (!data.reminders) return;
+                    
+                    const now = new Date();
+                    
+                    Object.values(data.reminders).forEach(reminder => {
+                        if (!reminder.sent && new Date(reminder.reminderDate) <= now) {
+                            this.sendReminderNotification(reminder.eventId);
+                            reminder.sent = true;
+                        }
+                    });
+                    
+                    DataManager.save(data);
+                }
+                
+                static sendReminderNotification(eventId) {
+                    const event = EventManager.get(eventId);
+                    if (!event) return;
+                    
+                    if ('Notification' in window && Notification.permission === 'granted') {
+                        const notification = new Notification(`Rappel: ${event.name}`, {
+                            body: `Demain à ${event.time} au ${event.location}`,
+                            icon: '/icon-192.png'
+                        });
+                        
+                        notification.onclick = function() {
+                            window.focus();
+                            UIManager.renderEventDetails(eventId);
+                        };
+                    }
+                }
+            }
+            
+            class PredictionSystem {
+                static makePrediction(userId, eventId, teamId) {
+                    const data = DataManager.load();
+                    if (!data.predictions) data.predictions = {};
+                    
+                    // Structure pour les prédictions par événement
+                    if (!data.predictions[eventId]) data.predictions[eventId] = [];
+                    
+                    // Éviter les doublons en supprimant toute prédiction existante pour cet utilisateur/événement
+                    data.predictions[eventId] = data.predictions[eventId].filter(p => p.userId !== userId);
+                    
+                    // Ajouter la nouvelle prédiction
+                    data.predictions[eventId].push({
+                        userId,
+                        teamId,
+                        timestamp: new Date().toISOString()
+                    });
+                    
+                    DataManager.save(data);
+                    return { success: true };
+                }
+                
+                static getEventPredictions(eventId) {
+                    const data = DataManager.load();
+                    return (data.predictions && data.predictions[eventId]) || [];
+                }
+                
+                static getUserPredictions(userId) {
+                    const data = DataManager.load();
+                    if (!data.predictions) return [];
+                    
+                    const predictions = [];
+                    
+                    // Parcourir toutes les prédictions de tous les événements
+                    Object.entries(data.predictions).forEach(([eventId, eventPredictions]) => {
+                        eventPredictions.forEach(prediction => {
+                            if (prediction.userId === userId) {
+                                predictions.push({
+                                    ...prediction,
+                                    eventId
+                                });
+                            }
+                        });
+                    });
+                    
+                    return predictions;
+                }
+                
+                static resolvePredictions(eventId, winningTeamId) {
+                    const data = DataManager.load();
+                    if (!data.predictions || !data.predictions[eventId]) return;
+                    
+                    data.predictions[eventId].forEach(prediction => {
+                        const isCorrect = prediction.teamId === winningTeamId;
+                        prediction.result = isCorrect ? 'correct' : 'incorrect';
+                        
+                        // Mettre à jour les statistiques de l'utilisateur
+                        if (data.userPoints[prediction.userId]) {
+                            if (isCorrect) {
+                                data.userPoints[prediction.userId].total += 10;
+                                data.userPoints[prediction.userId].won += 10;
+                                data.userPoints[prediction.userId].correctPredictions = 
+                                    (data.userPoints[prediction.userId].correctPredictions || 0) + 1;
+                            } else {
+                                data.userPoints[prediction.userId].lost += 5;
+                            }
+                        }
+                    });
+                    
+                    DataManager.save(data);
+                }
+                
+                static getLeaderboard() {
+                    const data = DataManager.load();
+                    if (!data.userPoints) return [];
+                    
+                    return Object.entries(data.userPoints).map(([userId, points]) => ({
+                        userId,
+                        name: userId,
+                        total: points.total,
+                        won: points.won || 0,
+                        correctPredictions: points.correctPredictions || 0
+                    })).sort((a, b) => b.total - a.total);
+                }
+            }
+            
+            class CalendarIntegration {
+                static addToCalendar(event) {
+                    const startTime = new Date(`${event.date}T${event.time}`);
+                    // Durée de 2 heures pour un match typique
+                    const endTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000);
+                    
+                    // Format pour lien Google Calendar
+                    const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.name)}&dates=${this.formatDateForGCal(startTime)}/${this.formatDateForGCal(endTime)}&details=${encodeURIComponent(`Lieu: ${event.location}`)}&location=${encodeURIComponent(event.location)}`;
+                    
+                    window.open(googleCalUrl, '_blank');
+                }
+                
+                static formatDateForGCal(date) {
+                    return date.toISOString().replace(/-|:|\.\d+/g, '');
+                }
+            }
+            
+            class WeatherAPI {
+                static getForecast(coords) {
+                    // Dans une vraie application, appeler une API météo
+                    return new Promise(resolve => {
+                        setTimeout(() => {
+                            const conditions = ["Ensoleillé", "Nuageux", "Pluie légère", "Pluie forte"];
+                            const randomCondition = conditions[Math.floor(Math.random() * conditions.length)];
+                            const precipitation = randomCondition.includes("Pluie") ? 
+                                (randomCondition === "Pluie légère" ? 2 : 7) : 0;
+                            
+                            const forecast = {
+                                temperature: Math.floor(Math.random() * 15) + 10, // 10-25°C
+                                precipitation: precipitation,
+                                windSpeed: Math.floor(Math.random() * 30), // 0-30 km/h
+                                humidity: Math.floor(Math.random() * 50) + 30, // 30-80%
+                                description: randomCondition,
+                                icon: randomCondition === "Ensoleillé" ? "sun" : 
+                                    (randomCondition === "Nuageux" ? "cloud" : "cloud-rain"),
+                                isPlayable: function() {
+                                    return this.precipitation < 5 && this.windSpeed < 30;
+                                }
+                            };
+                            
+                            resolve(forecast);
+                        }, 500);
+                    });
+                }
+            }
+            
+            class TacticsSystem {
+                constructor(canvasId) {
+                    this.canvas = document.getElementById(canvasId);
+                    this.ctx = this.canvas.getContext('2d');
+                    this.players = [];
+                    this.isReady = false;
+                    this.isDragging = false;
+                    this.selectedPlayer = null;
+                }
+                
+                init() {
+                    this.drawField();
+                    this.setupDragEvents();
+                    this.isReady = true;
+                    return this;
+                }
+                
+                drawField() {
+                    const width = this.canvas.width;
+                    const height = this.canvas.height;
+                    
+                    // Terrain
+                    this.ctx.fillStyle = '#3a6e3a';
+                    this.ctx.fillRect(0, 0, width, height);
+                    
+                    // Lignes blanches
+                    this.ctx.strokeStyle = 'white';
+                    this.ctx.lineWidth = 2;
+                    
+                    // Rectangle extérieur
+                    this.ctx.strokeRect(20, 20, width-40, height-40);
+                    
+                    // Ligne médiane
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(20, height/2);
+                    this.ctx.lineTo(width-20, height/2);
+                    this.ctx.stroke();
+                    
+                    // Cercle central
+                    this.ctx.beginPath();
+                    this.ctx.arc(width/2, height/2, 30, 0, Math.PI*2);
+                    this.ctx.stroke();
+                    
+                    // Surfaces de réparation
+                    const surfaceHeight = 70;
+                    const surfaceWidth = 120;
+                    
+                    // Surface haute
+                    this.ctx.strokeRect((width-surfaceWidth)/2, 20, surfaceWidth, surfaceHeight);
+                    
+                    // Surface basse
+                    this.ctx.strokeRect((width-surfaceWidth)/2, height-surfaceHeight-20, surfaceWidth, surfaceHeight);
+                }
+                
+                drawPlayers() {
+                    this.drawField();
+                    
+                    this.players.forEach(player => {
+                        const x = player.x * this.canvas.width;
+                        const y = player.y * this.canvas.height;
+                        
+                        // Dessiner le cercle du joueur
+                        this.ctx.fillStyle = player === this.selectedPlayer ? '#ff6b6b' : '#2C5AFF';
+                        this.ctx.beginPath();
+                        this.ctx.arc(x, y, 15, 0, Math.PI*2);
+                        this.ctx.fill();
+                        
+                        // Dessiner le numéro du joueur
+                        this.ctx.fillStyle = 'white';
+                        this.ctx.font = '12px Arial';
+                        this.ctx.textAlign = 'center';
+                        this.ctx.textBaseline = 'middle';
+                        this.ctx.fillText(player.id, x, y);
+                    });
+                }
+                
+                loadFormation(formation) {
+                    this.players = formation.map(player => ({
+                        id: player.id,
+                        x: player.position.x,
+                        y: player.position.y
+                    }));
+                    
+                    this.drawPlayers();
+                }
+                
+                setupDragEvents() {
+                    this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
+                    this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
+                    this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
+                    
+                    this.canvas.addEventListener('touchstart', this.handleTouchStart.bind(this));
+                    this.canvas.addEventListener('touchmove', this.handleTouchMove.bind(this));
+                    this.canvas.addEventListener('touchend', this.handleTouchEnd.bind(this));
+                }
+                
+                handleMouseDown(e) {
+                    const rect = this.canvas.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) / this.canvas.width;
+                    const y = (e.clientY - rect.top) / this.canvas.height;
+                    
+                    this.selectedPlayer = this.players.find(player => {
+                        const dx = player.x - x;
+                        const dy = player.y - y;
+                        return Math.sqrt(dx*dx + dy*dy) < 0.05;
+                    });
+                    
+                    if (this.selectedPlayer) {
+                        this.isDragging = true;
+                        this.drawPlayers();
+                    }
+                }
+                
+                handleMouseMove(e) {
+                    if (!this.isDragging || !this.selectedPlayer) return;
+                    
+                    const rect = this.canvas.getBoundingClientRect();
+                    this.selectedPlayer.x = (e.clientX - rect.left) / this.canvas.width;
+                    this.selectedPlayer.y = (e.clientY - rect.top) / this.canvas.height;
+                    
+                    this.drawPlayers();
+                }
+                
+                handleMouseUp() {
+                    this.isDragging = false;
+                    this.selectedPlayer = null;
+                }
+                
+                handleTouchStart(e) {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    const rect = this.canvas.getBoundingClientRect();
+                    const x = (touch.clientX - rect.left) / this.canvas.width;
+                    const y = (touch.clientY - rect.top) / this.canvas.height;
+                    
+                    this.selectedPlayer = this.players.find(player => {
+                        const dx = player.x - x;
+                        const dy = player.y - y;
+                        return Math.sqrt(dx*dx + dy*dy) < 0.05;
+                    });
+                    
+                    if (this.selectedPlayer) {
+                        this.isDragging = true;
+                        this.drawPlayers();
+                    }
+                }
+                
+                handleTouchMove(e) {
+                    if (!this.isDragging || !this.selectedPlayer) return;
+                    e.preventDefault();
+                    
+                    const touch = e.touches[0];
+                    const rect = this.canvas.getBoundingClientRect();
+                    this.selectedPlayer.x = (touch.clientX - rect.left) / this.canvas.width;
+                    this.selectedPlayer.y = (touch.clientY - rect.top) / this.canvas.height;
+                    
+                    this.drawPlayers();
+                }
+                
+                handleTouchEnd() {
+                    this.isDragging = false;
+                    this.selectedPlayer = null;
+                }
+                
+                getFormation() {
+                    return this.players.map(player => ({
+                        id: player.id,
+                        position: { x: player.x, y: player.y }
+                    }));
+                }
+                
+                static getDefaultFormation(formationName) {
+                    const formations = {
+                        '4-4-2': [
+                            { id: 1, position: { x: 0.5, y: 0.9 } }, // GK
+                            { id: 2, position: { x: 0.2, y: 0.75 } }, // LB
+                            { id: 3, position: { x: 0.35, y: 0.75 } }, // CB
+                            { id: 4, position: { x: 0.65, y: 0.75 } }, // CB
+                            { id: 5, position: { x: 0.8, y: 0.75 } }, // RB
+                            { id: 6, position: { x: 0.2, y: 0.5 } }, // LM
+                            { id: 7, position: { x: 0.35, y: 0.5 } }, // CM
+                            { id: 8, position: { x: 0.65, y: 0.5 } }, // CM
+                            { id: 9, position: { x: 0.8, y: 0.5 } }, // RM
+                            { id: 10, position: { x: 0.35, y: 0.25 } }, // ST
+                            { id: 11, position: { x: 0.65, y: 0.25 } }  // ST
+                        ],
+                        '4-3-3': [
+                            { id: 1, position: { x: 0.5, y: 0.9 } },
+                            { id: 2, position: { x: 0.2, y: 0.75 } },
+                            { id: 3, position: { x: 0.35, y: 0.75 } },
+                            { id: 4, position: { x: 0.65, y: 0.75 } },
+                            { id: 5, position: { x: 0.8, y: 0.75 } },
+                            { id: 6, position: { x: 0.35, y: 0.5 } },
+                            { id: 7, position: { x: 0.5, y: 0.55 } },
+                            { id: 8, position: { x: 0.65, y: 0.5 } },
+                            { id: 9, position: { x: 0.2, y: 0.25 } },
+                            { id: 10, position: { x: 0.5, y: 0.25 } },
+                            { id: 11, position: { x: 0.8, y: 0.25 } }
+                        ],
+                        '3-5-2': [
+                            { id: 1, position: { x: 0.5, y: 0.9 } },
+                            { id: 2, position: { x: 0.35, y: 0.75 } },
+                            { id: 3, position: { x: 0.5, y: 0.75 } },
+                            { id: 4, position: { x: 0.65, y: 0.75 } },
+                            { id: 5, position: { x: 0.2, y: 0.5 } },
+                            { id: 6, position: { x: 0.35, y: 0.55 } },
+                            { id: 7, position: { x: 0.5, y: 0.5 } },
+                            { id: 8, position: { x: 0.65, y: 0.55 } },
+                            { id: 9, position: { x: 0.8, y: 0.5 } },
+                            { id: 10, position: { x: 0.35, y: 0.25 } },
+                            { id: 11, position: { x: 0.65, y: 0.25 } }
+                        ],
+                        '5-3-2': [
+                            { id: 1, position: { x: 0.5, y: 0.9 } },
+                            { id: 2, position: { x: 0.1, y: 0.65 } },
+                            { id: 3, position: { x: 0.3, y: 0.75 } },
+                            { id: 4, position: { x: 0.5, y: 0.75 } },
+                            { id: 5, position: { x: 0.7, y: 0.75 } },
+                            { id: 6, position: { x: 0.9, y: 0.65 } },
+                            { id: 7, position: { x: 0.3, y: 0.5 } },
+                            { id: 8, position: { x: 0.5, y: 0.5 } },
+                            { id: 9, position: { x: 0.7, y: 0.5 } },
+                            { id: 10, position: { x: 0.35, y: 0.25 } },
+                            { id: 11, position: { x: 0.65, y: 0.25 } }
+                        ]
+                    };
+                    
+                    return formations[formationName] || formations['4-4-2'];
+                }
+                
+                static saveFormation(teamId, formationName, positions) {
+                    const data = DataManager.load();
+                    
+                    if (!data.formations) data.formations = {};
+                    if (!data.formations[teamId]) data.formations[teamId] = {};
+                    
+                    data.formations[teamId][formationName] = positions;
+                    DataManager.save(data);
+                    
+                    return true;
+                }
+                
+                static loadFormation(teamId, formationName) {
+                    const data = DataManager.load();
+                    
+                    if (!data.formations || !data.formations[teamId] || !data.formations[teamId][formationName]) {
+                        return null;
+                    }
+                    
+                    return data.formations[teamId][formationName];
+                }
+            }
+            
+            class PaymentSplitter {
+                static calculateSplit(totalAmount, playerCount, method = 'equal') {
+                    if (method === 'equal') {
+                        return totalAmount / playerCount;
+                    }
+                    // D'autres méthodes pourraient être implémentées (par temps de jeu, etc.)
+                    return totalAmount / playerCount;
+                }
+                
+                static createCustomSplit(totalAmount, players) {
+                    // Format: [{id: "player1", name: "John", share: 0.2}, ...]
+                    // Vérifie que la somme des parts = 1
+                    const sumShares = players.reduce((sum, player) => sum + player.share, 0);
+                    if (Math.abs(sumShares - 1) > 0.01) { // Tolérance d'erreur pour erreurs d'arrondi
+                        return { success: false, message: "La somme des parts doit être égale à 100%" };
+                    }
+                    
+                    const result = players.map(player => ({
+                        ...player,
+                        amount: totalAmount * player.share
+                    }));
+                    
+                    return { success: true, splits: result };
+                }
+                
+                static shareSplitResults(totalAmount, amountPerPerson, playerCount) {
+                    const text = `Partage des frais: Total ${totalAmount}€ pour ${playerCount} joueurs = ${amountPerPerson.toFixed(2)}€ par personne`;
+                    
+                    if (navigator.share) {
+                        navigator.share({
+                            title: 'Partage des frais FivePro',
+                            text: text
+                        });
+                    } else {
+                        navigator.clipboard.writeText(text)
+                            .then(() => showToast("Texte copié dans le presse-papiers!"))
+                            .catch(err => showToast("Erreur lors de la copie", true));
+                    }
+                }
+            }
+            
+            class ReplacementFinder {
+                static requestReplacement(eventId, positionsNeeded = 1, urgencyLevel = 'normal') {
+                    const data = DataManager.load();
+                    const event = EventManager.get(eventId);
+                    
+                    if (!event) {
+                        return { success: false, message: "Événement introuvable" };
+                    }
+                    
+                    if (!data.replacements) data.replacements = {};
+                    
+                    const requestId = DataManager.generateId();
+                    data.replacements[requestId] = {
+                        id: requestId,
+                        eventId,
+                        positionsNeeded,
+                        urgencyLevel,
+                        status: 'open',
+                        createdAt: new Date().toISOString(),
+                        responses: []
+                    };
+                    
+                    DataManager.save(data);
+                    
+                    // Dans une vraie application, on enverrait des notifications push
+                    // aux joueurs disponibles, SMS, etc.
+                    
+                    return { 
+                        success: true, 
+                        message: `Demande de ${positionsNeeded} remplaçant(s) envoyée` 
+                    };
+                }
+                
+                static respondToRequest(requestId, userId, available) {
+                    const data = DataManager.load();
+                    
+                    if (!data.replacements || !data.replacements[requestId]) {
+                        return { success: false, message: "Demande introuvable" };
+                    }
+                    
+                    const request = data.replacements[requestId];
+                    
+                    // Éviter les doublons
+                    request.responses = request.responses.filter(r => r.userId !== userId);
+                    
+                    request.responses.push({
+                        userId,
+                        available,
+                        respondedAt: new Date().toISOString()
+                    });
+                    
+                    // Si suffisamment de remplaçants ont répondu positivement
+                    const positiveResponses = request.responses.filter(r => r.available).length;
+                    if (positiveResponses >= request.positionsNeeded) {
+                        request.status = 'filled';
+                    }
+                    
+                    DataManager.save(data);
+                    
+                    return { 
+                        success: true, 
+                        message: available ? "Vous avez accepté de remplacer" : "Vous avez décliné" 
+                    };
+                }
+            }
+            
+            // UI MANAGER AMÉLIORÉ
+            class UIManager {
+                static init() {
+                    this.initNavigation();
+                    this.checkCaptainStatus();
+                    this.initEventListeners();
+                    this.renderTeams();
+                    this.renderUpcomingEvents();
+                    
+                    // Initialiser la recherche
+                    this.initSearchFunctionality();
+                    
+                    // Initialiser la création d'événement par étapes
+                    this.initStepForm();
+                    
+                    // Initialiser le système de notifications
+                    NotificationManager.checkReminders();
+                    
+                    // Initialiser le calculateur de partage de frais
+                    this.initSplitPayment();
+                    
+                    // Initialiser le système de tactiques
+                    this.initTactics();
+                    
+                    // Initialiser le système de synchronisation
+                    DataManager.syncWhenOnline();
+                    
+                    // Afficher les squelettes de chargement
+                    setTimeout(() => {
+                        document.querySelectorAll('.skeleton-loader').forEach(el => {
+                            el.style.display = 'none';
+                        });
+                        this.renderTeams();
+                        this.renderUpcomingEvents();
+                    }, 1000);
+                }
+                
+                static initNavigation() {
+                    document.querySelectorAll('.tab-item').forEach(tab => {
+                        tab.addEventListener('click', e => {
+                            e.preventDefault();
+                            const sectionId = tab.getAttribute('data-section');
+                            if (sectionId && document.getElementById(sectionId)) {
+                                this.showSection(sectionId);
+                                document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                                tab.classList.add('active');
+                                document.getElementById('pageTitle').textContent = tab.querySelector('span').textContent;
+                            }
+                        });
+                    });
+                    
+                    // Bouton retour
+                    document.getElementById('backButton').addEventListener('click', e => {
+                        e.preventDefault();
+                        history.back();
+                    });
+                }
+                
+                static showSection(sectionId) {
+                    document.querySelectorAll('section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        section.classList.add('active');
+                        window.scrollTo(0, 0);
+                        
+                        // Afficher le bouton retour si ce n'est pas un onglet principal
+                        const tabSections = ['home', 'create', 'teams', 'fields', 'tactics', 'splitPayment', 'predictions'];
+                        const backButton = document.getElementById('backButton');
+                        backButton.style.display = tabSections.includes(sectionId) ? 'none' : 'block';
+                    }
+                    
+                    // Mettre à jour l'URL pour permettre la navigation avec le bouton retour
+                    history.pushState(null, null, `#${sectionId}`);
+                }
+                
+                static checkCaptainStatus() {
+                    const isCaptain = CaptainManager.isLoggedIn();
+                    const captainRegistration = document.querySelector('#home .ios-card:first-of-type');
+                    const tabItems = document.querySelectorAll('.tab-item');
+                    
+                    if (isCaptain) {
+                        captainRegistration.style.display = 'none';
+                        tabItems.forEach(tab => tab.style.display = 'flex');
+                    } else {
+                        captainRegistration.style.display = 'block';
+                        tabItems.forEach(tab => {
+                            if (tab.getAttribute('data-section') !== 'home') {
+                                tab.style.display = 'none';
+                            }
+                        });
+                    }
+                }
+                
+                static initEventListeners() {
+                    // Inscription capitaine
+                    document.getElementById('registerCaptainBtn').addEventListener('click', () => {
+                        const name = document.getElementById('captainName').value.trim();
+                        const password = document.getElementById('captainPassword').value;
+                        
+                        if (!name || !password) {
+                            this.showRegistrationMessage('Veuillez compléter tous les champs', true);
+                            return;
+                        }
+                        
+                        const result = CaptainManager.register(name, password);
+                        if (result.success) {
+                            this.showRegistrationMessage('Inscription réussie!');
+                            showToast('Bienvenue, Capitaine ' + name + '!');
+                            setTimeout(() => {
+                                this.checkCaptainStatus();
+                                this.showSection('create');
+                                document.querySelectorAll('.tab-item')[1].classList.add('active');
+                                document.querySelectorAll('.tab-item')[0].classList.remove('active');
+                            }, 1000);
+                        } else {
+                            this.showRegistrationMessage(result.message, true);
+                        }
+                    });
+                    
+                    // Type d'événement
+                    document.getElementById('eventType').addEventListener('change', function() {
+                        document.getElementById('fiveOptions').style.display = 
+                            this.value === 'five' ? 'block' : 'none';
+                        document.getElementById('tournamentOptions').style.display = 
+                            this.value === 'tournament' ? 'block' : 'none';
+                    });
+                    
+                    // Bouton pour finaliser la création d'événement
+                    document.getElementById('createEventBtn').addEventListener('click', () => {
+                        // Récupérer les données du formulaire multi-étapes
+                        const eventName = document.getElementById('eventName').value.trim();
+                        const eventType = document.getElementById('eventType').value;
+                        const playersPerTeam = eventType === 'five' ? 
+                                document.getElementById('playersPerTeam').value : null;
+                        const numTeams = eventType === 'tournament' ? 
+                                document.getElementById('numTeams').value : null;
+                        const eventDate = document.getElementById('eventDate').value;
+                        const eventTime = document.getElementById('eventTime').value;
+                        const eventLocation = document.getElementById('eventLocation').value.trim();
+                        
+                        const eventData = {
+                            name: eventName,
+                            type: eventType,
+                            playersPerTeam,
+                            numTeams,
+                            date: eventDate,
+                            time: eventTime,
+                            location: eventLocation,
+                            teams: []
+                        };
+                        
+                        const eventId = EventManager.create(eventData);
+                        
+                        showToast("Événement créé avec succès!");
+                        
+                        // Réinitialiser le formulaire
+                        document.getElementById('eventName').value = '';
+                        document.getElementById('eventDate').value = '';
+                        document.getElementById('eventTime').value = '';
+                        document.getElementById('eventLocation').value = '';
+                        
+                        // Revenir à l'étape 1
+                        document.getElementById('createStep2').style.display = 'none';
+                        document.getElementById('createStep3').style.display = 'none';
+                        document.querySelector('.progress-steps .step:nth-child(1)').classList.add('active');
+                        document.querySelector('.progress-steps .step:nth-child(2)').classList.remove('active');
+                        document.querySelector('.progress-steps .step:nth-child(3)').classList.remove('active');
+                        
+                        // Mettre à jour les événements
+                        this.renderUpcomingEvents();
+                        
+                        // Afficher les détails de l'événement créé
+                        setTimeout(() => {
+                            this.renderEventDetails(eventId);
+                        }, 500);
+                    });
+                    
+                    // Formulaire de création d'équipe
+                    document.getElementById('showCreateTeamFormBtn').addEventListener('click', () => {
+                        document.getElementById('createTeamForm').style.display = 'block';
+                        document.getElementById('showCreateTeamFormBtn').style.display = 'none';
+                    });
+                    
+                    // Annuler la création d'équipe
+                    document.getElementById('cancelTeamBtn').addEventListener('click', () => {
+                        document.getElementById('createTeamForm').style.display = 'none';
+                        document.getElementById('showCreateTeamFormBtn').style.display = 'flex';
+                        document.getElementById('teamName').value = '';
+                    });
+                    
+                    // Création d'équipe
+                    document.getElementById('createTeamBtn').addEventListener('click', () => {
+                        const teamName = document.getElementById('teamName').value.trim();
+                        const teamColor = document.getElementById('teamColor').value;
+                        
+                        if (!teamName) {
+                            showToast("Veuillez entrer un nom d'équipe", true);
+                            return;
+                        }
+                        
+                        const teams = TeamManager.getAll();
+                        if (Object.values(teams).some(team => team.name === teamName)) {
+                            showToast("Une équipe avec ce nom existe déjà", true);
+                            return;
+                        }
+                        
+                        TeamManager.create(teamName, teamColor);
+                        showToast("Équipe créée avec succès!");
+                        document.getElementById('teamName').value = '';
+                        document.getElementById('createTeamForm').style.display = 'none';
+                        document.getElementById('showCreateTeamFormBtn').style.display = 'flex';
+                        this.renderTeams();
+                    });
+                    
+                    // Trouver des remplaçants
+                    document.getElementById('findReplacementBtn').addEventListener('click', () => {
+                        const eventId = document.querySelector('#eventDetails').dataset.eventId;
+                        if (!eventId) return;
+                        
+                        // Créer une boîte de dialogue modale pour spécifier les détails
+                        const modal = document.createElement('div');
+                        modal.className = 'ios-modal';
+                        modal.innerHTML = `
+                            <div class="modal-content">
+                                                                <h3>Rechercher des remplaçants</h3>
+                                <div class="form-group">
+                                    <label for="positionsNeeded">Nombre de joueurs</label>
+                                    <input type="number" id="positionsNeeded" class="ios-input" min="1" max="10" value="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="urgencyLevel">Niveau d'urgence</label>
+                                    <select id="urgencyLevel" class="ios-input">
+                                        <option value="normal">Normal</option>
+                                        <option value="urgent">Urgent</option>
+                                        <option value="very-urgent">Très urgent</option>
+                                    </select>
+                                </div>
+                                <div class="button-group">
+                                    <button id="cancelReplacementBtn" class="ios-button secondary">Annuler</button>
+                                    <button id="sendReplacementRequestBtn" class="ios-button accent">Envoyer</button>
+                                </div>
+                            </div>
+                        `;
+                        
+                        document.body.appendChild(modal);
+                        
+                        // Gestionnaires d'événements pour la modale
+                        document.getElementById('cancelReplacementBtn').addEventListener('click', () => {
+                            document.body.removeChild(modal);
+                        });
+                        
+                        document.getElementById('sendReplacementRequestBtn').addEventListener('click', () => {
+                            const positionsNeeded = parseInt(document.getElementById('positionsNeeded').value);
+                            const urgencyLevel = document.getElementById('urgencyLevel').value;
+                            
+                            const result = ReplacementFinder.requestReplacement(eventId, positionsNeeded, urgencyLevel);
+                            
+                            if (result.success) {
+                                showToast(result.message);
+                                document.body.removeChild(modal);
+                            } else {
+                                showToast(result.message, true);
+                            }
+                        });
+                    });
+                    
+                    // Ajouter au calendrier
+                    document.getElementById('addToCalendarBtn').addEventListener('click', () => {
+                        const eventId = document.querySelector('#eventDetails').dataset.eventId;
+                        if (!eventId) return;
+                        
+                        const event = EventManager.get(eventId);
+                        CalendarIntegration.addToCalendar(event);
+                    });
+                    
+                    // Partager l'événement
+                    document.getElementById('shareBtn').addEventListener('click', () => {
+                        const eventId = document.querySelector('#eventDetails').dataset.eventId;
+                        if (!eventId) return;
+                        
+                        const event = EventManager.get(eventId);
+                        const shareText = `${event.name} - ${this.formatDate(event.date)} à ${event.time} au ${event.location}. Rejoins-nous!`;
+                        
+                        if (navigator.share) {
+                            navigator.share({
+                                title: event.name,
+                                text: shareText,
+                                url: window.location.href.split('#')[0] + '#eventDetails'
+                            });
+                        } else {
+                            navigator.clipboard.writeText(shareText)
+                                .then(() => showToast("Texte copié dans le presse-papiers!"))
+                                .catch(err => showToast("Erreur lors de la copie", true));
+                        }
+                    });
+                }
+                
+                static initStepForm() {
+                    // Étapes de création d'événement
+                    document.getElementById('nextStep1Btn').addEventListener('click', () => {
+                        const eventName = document.getElementById('eventName').value.trim();
+                        if (!eventName) {
+                            showToast("Veuillez entrer un nom d'événement", true);
+                            return;
+                        }
+                        
+                        document.getElementById('createStep2').style.display = 'block';
+                        document.querySelector('.progress-steps .step:nth-child(1)').classList.remove('active');
+                        document.querySelector('.progress-steps .step:nth-child(1)').classList.add('completed');
+                        document.querySelector('.progress-steps .step:nth-child(2)').classList.add('active');
+                        window.scrollTo(0, 0);
+                    });
+                    
+                    document.getElementById('prevStep2Btn').addEventListener('click', () => {
+                        document.getElementById('createStep2').style.display = 'none';
+                        document.querySelector('.progress-steps .step:nth-child(1)').classList.add('active');
+                        document.querySelector('.progress-steps .step:nth-child(1)').classList.remove('completed');
+                        document.querySelector('.progress-steps .step:nth-child(2)').classList.remove('active');
+                    });
+                    
+                    document.getElementById('nextStep2Btn').addEventListener('click', () => {
+                        const eventDate = document.getElementById('eventDate').value;
+                        const eventTime = document.getElementById('eventTime').value;
+                        const eventLocation = document.getElementById('eventLocation').value.trim();
+                        
+                        if (!eventDate || !eventTime || !eventLocation) {
+                            showToast("Veuillez compléter tous les champs", true);
+                            return;
+                        }
+                        
+                        // Mise à jour du résumé
+                        document.getElementById('summaryType').textContent = 
+                            document.getElementById('eventType').value === 'five' ? 'Five' : 'Tournoi';
+                        document.getElementById('summaryName').textContent = document.getElementById('eventName').value;
+                        document.getElementById('summaryDate').textContent = new Date(eventDate).toLocaleDateString('fr-FR', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        document.getElementById('summaryTime').textContent = eventTime;
+                        document.getElementById('summaryLocation').textContent = eventLocation;
+                        
+                        document.getElementById('createStep3').style.display = 'block';
+                        document.querySelector('.progress-steps .step:nth-child(2)').classList.remove('active');
+                        document.querySelector('.progress-steps .step:nth-child(2)').classList.add('completed');
+                        document.querySelector('.progress-steps .step:nth-child(3)').classList.add('active');
+                        window.scrollTo(0, 0);
+                    });
+                    
+                    document.getElementById('prevStep3Btn').addEventListener('click', () => {
+                        document.getElementById('createStep3').style.display = 'none';
+                        document.querySelector('.progress-steps .step:nth-child(2)').classList.add('active');
+                        document.querySelector('.progress-steps .step:nth-child(2)').classList.remove('completed');
+                        document.querySelector('.progress-steps .step:nth-child(3)').classList.remove('active');
+                    });
+                }
+                
+                static initSplitPayment() {
+                    const totalAmountInput = document.getElementById('totalAmount');
+                    const playerCountInput = document.getElementById('playerCount');
+                    const amountPerPlayerDisplay = document.getElementById('amountPerPlayer');
+                    const shareCostBtn = document.getElementById('shareCostBtn');
+                    const splitMethodSelect = document.getElementById('splitMethod');
+                    
+                    // Calculer le montant par joueur quand les valeurs changent
+                    const updateSplitAmount = () => {
+                        const totalAmount = parseFloat(totalAmountInput.value) || 0;
+                        const playerCount = parseInt(playerCountInput.value) || 1;
+                        
+                        const amountPerPerson = PaymentSplitter.calculateSplit(totalAmount, playerCount);
+                        amountPerPlayerDisplay.textContent = amountPerPerson.toFixed(2) + '€';
+                    };
+                    
+                    totalAmountInput.addEventListener('input', updateSplitAmount);
+                    playerCountInput.addEventListener('input', updateSplitAmount);
+                    
+                    // Partager le calcul
+                    shareCostBtn.addEventListener('click', () => {
+                        const totalAmount = parseFloat(totalAmountInput.value) || 0;
+                        const playerCount = parseInt(playerCountInput.value) || 1;
+                        const amountPerPerson = PaymentSplitter.calculateSplit(totalAmount, playerCount);
+                        
+                        PaymentSplitter.shareSplitResults(totalAmount, amountPerPerson, playerCount);
+                    });
+                    
+                    // Gestion du mode de partage personnalisé
+                    if (splitMethodSelect) {
+                        splitMethodSelect.addEventListener('change', function() {
+                            const customSplitContainer = document.getElementById('customSplitContainer');
+                            if (this.value === 'custom') {
+                                customSplitContainer.style.display = 'block';
+                                // Générer des champs pour chaque joueur
+                                const playerCount = parseInt(playerCountInput.value) || 1;
+                                let html = '';
+                                for (let i = 1; i <= playerCount; i++) {
+                                    html += `
+                                    <div class="form-group">
+                                        <label for="player${i}Share">Joueur ${i}</label>
+                                        <input type="range" id="player${i}Share" class="ios-range" min="0" max="100" value="${Math.floor(100/playerCount)}">
+                                        <span id="player${i}ShareValue">${Math.floor(100/playerCount)}%</span>
+                                    </div>`;
+                                }
+                                customSplitContainer.innerHTML = html;
+                                
+                                // Ajouter les écouteurs d'événements
+                                for (let i = 1; i <= playerCount; i++) {
+                                    document.getElementById(`player${i}Share`).addEventListener('input', function() {
+                                        document.getElementById(`player${i}ShareValue`).textContent = `${this.value}%`;
+                                        // Recalculer les montants
+                                        const totalAmount = parseFloat(totalAmountInput.value) || 0;
+                                        const playerShare = parseInt(this.value) / 100;
+                                        const amountPerPerson = totalAmount * playerShare;
+                                        // Mise à jour dans une future implémentation
+                                    });
+                                }
+                            } else {
+                                customSplitContainer.style.display = 'none';
+                                updateSplitAmount();
+                            }
+                        });
+                    }
+                }
+                
+                static initTactics() {
+                    // Initialisation du système de tactiques seulement si la section est présente
+                    const tacticsCanvas = document.getElementById('tactics-canvas');
+                    if (!tacticsCanvas) return;
+                    
+                    const tactics = new TacticsSystem('tactics-canvas').init();
+                    
+                    // Chargement de la formation par défaut
+                    const formationSelect = document.getElementById('tactics-formation');
+                    const defaultFormation = TacticsSystem.getDefaultFormation(formationSelect.value);
+                    tactics.loadFormation(defaultFormation);
+                    
+                    // Changer de formation
+                    formationSelect.addEventListener('change', function() {
+                        const formation = TacticsSystem.getDefaultFormation(this.value);
+                        tactics.loadFormation(formation);
+                    });
+                    
+                    // Sauvegarder la formation
+                    document.getElementById('save-tactics').addEventListener('click', () => {
+                        const data = DataManager.load();
+                        const captain = data.captain;
+                        if (!captain) {
+                            showToast("Veuillez vous connecter pour sauvegarder", true);
+                            return;
+                        }
+                        
+                        const formationName = formationSelect.value;
+                        const positions = tactics.getFormation();
+                        
+                        // Utiliser l'ID de l'équipe actuellement sélectionnée, ou à défaut l'ID du capitaine
+                        const teamId = captain.name; // Dans une vraie app, ce serait l'ID d'équipe active
+                        
+                        TacticsSystem.saveFormation(teamId, formationName, positions);
+                        showToast(`Formation ${formationName} sauvegardée`);
+                        
+                        // Mise à jour de la liste des formations sauvegardées
+                        renderSavedFormations(teamId);
+                    });
+                    
+                    // Afficher les formations sauvegardées
+                    const renderSavedFormations = (teamId) => {
+                        const data = DataManager.load();
+                        if (!data.formations || !data.formations[teamId]) {
+                            document.getElementById('saved-formations').innerHTML = 
+                                "<p>Aucune formation sauvegardée</p>";
+                            return;
+                        }
+                        
+                        const formations = Object.keys(data.formations[teamId]);
+                        let html = "";
+                        
+                        formations.forEach(formationName => {
+                            html += `
+                            <li data-formation="${formationName}">
+                                <div class="name">${formationName}</div>
+                                <button class="ios-button secondary" style="width: auto; padding: 8px 12px;">
+                                    Charger
+                                </button>
+                            </li>`;
+                        });
+                        
+                        document.getElementById('saved-formations').innerHTML = html;
+                        
+                        // Ajouter des écouteurs d'événements
+                        document.querySelectorAll('#saved-formations li button').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const formationName = this.parentElement.dataset.formation;
+                                const savedFormation = TacticsSystem.loadFormation(teamId, formationName);
+                                
+                                if (savedFormation) {
+                                    tactics.loadFormation(savedFormation);
+                                    formationSelect.value = formationName;
+                                    showToast(`Formation ${formationName} chargée`);
+                                }
+                            });
+                        });
+                    };
+                    
+                    // Charger les formations au chargement initial
+                    const data = DataManager.load();
+                    if (data.captain) {
+                        renderSavedFormations(data.captain.name);
+                    }
+                }
+                
+                static initSearchFunctionality() {
+                    // Recherche d'équipes
+                    const teamSearchInput = document.getElementById('teamSearchInput');
+                    if (teamSearchInput) {
+                        teamSearchInput.addEventListener('input', function() {
+                            const searchTerm = this.value.toLowerCase();
+                            const teams = TeamManager.getAll();
+                            const filteredTeams = {};
+                            
+                            Object.keys(teams).forEach(key => {
+                                if (teams[key].name.toLowerCase().includes(searchTerm)) {
+                                    filteredTeams[key] = teams[key];
+                                }
+                            });
+                            
+                            UIManager.renderTeams(filteredTeams);
+                        });
+                    }
+                    
+                    // Recherche d'événements pour prédictions
+                    const predictionEventSearchInput = document.getElementById('predictionEventSearchInput');
+                    if (predictionEventSearchInput) {
+                        predictionEventSearchInput.addEventListener('input', function() {
+                            const searchTerm = this.value.toLowerCase();
+                            const events = EventManager.getAll();
+                            const filteredEvents = {};
+                            
+                            Object.keys(events).forEach(key => {
+                                if (events[key].name.toLowerCase().includes(searchTerm) || 
+                                    events[key].location.toLowerCase().includes(searchTerm)) {
+                                    filteredEvents[key] = events[key];
+                                }
+                            });
+                            
+                            UIManager.renderPredictionEvents(filteredEvents);
+                        });
+                    }
+                }
+                
+                static showRegistrationMessage(message, isError = false) {
+                    const messageElement = document.getElementById('registrationMessage');
+                    messageElement.textContent = message;
+                    messageElement.style.color = isError ? 'var(--danger-color)' : 'var(--success-color)';
+                }
+                
+                static renderTeams(teamsData) {
+                    const teams = teamsData || TeamManager.getAll();
+                    const teamGrid = document.getElementById('teamGrid');
+                    if (!teamGrid) return;
+                    
+                    teamGrid.innerHTML = '';
+                    
+                    if (Object.keys(teams).length === 0) {
+                        teamGrid.innerHTML = '<p class="text-center">Aucune équipe créée pour le moment.</p>';
+                        return;
+                    }
+                    
+                    Object.values(teams).forEach(team => {
+                        const teamCard = document.createElement('div');
+                        teamCard.className = 'team-card';
+                        teamCard.dataset.teamId = team.id;
+                        
+                        teamCard.innerHTML = `
+                            <h3>${team.name}</h3>
+                            <p class="members"><i class="fas fa-users"></i> ${team.members.length} membres</p>
+                        `;
+                        
+                        teamCard.addEventListener('click', () => {
+                            this.renderTeamDetails(team.id);
+                        });
+                        
+                        teamGrid.appendChild(teamCard);
+                    });
+                }
+                
+                static formatDate(dateStr) {
+                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                    return new Date(dateStr).toLocaleDateString('fr-FR', options);
+                }
+                
+                static renderUpcomingEvents() {
+                    const events = EventManager.getAll();
+                    const upcomingEventsDiv = document.getElementById('upcomingEvents');
+                    if (!upcomingEventsDiv) return;
+                    
+                    upcomingEventsDiv.innerHTML = '';
+                    
+                    const now = new Date();
+                    const upcomingEvents = Object.values(events)
+                        .filter(event => new Date(`${event.date}T${event.time}`) > now)
+                        .sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+                    
+                    if (upcomingEvents.length === 0) {
+                        upcomingEventsDiv.innerHTML = '<p class="text-center">Aucun événement programmé pour le moment.</p>';
+                        return;
+                    }
+                    
+                    upcomingEvents.slice(0, 3).forEach(event => {
+                        const eventCard = document.createElement('div');
+                        eventCard.className = 'event-item';
+                        
+                        const date = new Date(`${event.date}T${event.time}`);
+                        const formattedDate = date.toLocaleDateString('fr-FR', {
+                            weekday: 'short',
+                            day: 'numeric',
+                            month: 'short'
+                        });
+                        
+                        const formattedTime = event.time.substring(0, 5);
+                        
+                        eventCard.innerHTML = `
+                            <div class="event-date">${formattedDate} à ${formattedTime}</div>
+                            <div class="event-name">${event.name}</div>
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> ${event.location}</div>
+                        `;
+                        
+                        eventCard.addEventListener('click', () => {
+                            this.renderEventDetails(event.id);
+                        });
+                        
+                        upcomingEventsDiv.appendChild(eventCard);
+                    });
+                }
+                
+                static renderTeamDetails(teamId) {
+                    const team = TeamManager.get(teamId);
+                    if (!team) return;
+                    
+                    // Remplir les informations de base
+                    document.getElementById('detailTeamName').textContent = team.name;
+                    document.getElementById('memberCount').textContent = team.members.length;
+                    
+                    // Remplir les statistiques
+                    document.getElementById('team-matches').textContent = team.stats?.matches || 0;
+                    document.getElementById('team-wins').textContent = team.stats?.wins || 0;
+                    document.getElementById('team-goals').textContent = team.stats?.goals || 0;
+                    
+                    // Remplir la liste des membres
+                    const membersList = document.getElementById('teamMembersList');
+                    membersList.innerHTML = '';
+                    
+                    if (team.members.length === 0) {
+                        membersList.innerHTML = '<p>Aucun membre dans cette équipe.</p>';
+                    } else {
+                        team.members.forEach(member => {
+                            const li = document.createElement('li');
+                            li.innerHTML = `
+                                <div class="name">${member}</div>
+                                <button class="remove-btn" data-member="${member}">
+                                    <i class="fas fa-times"></i> Retirer
+                                </button>
+                            `;
+                            membersList.appendChild(li);
+                        });
+                        
+                        // Ajouter les écouteurs d'événements pour les boutons de suppression
+                        membersList.querySelectorAll('.remove-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const memberName = this.dataset.member;
+                                const result = TeamManager.removeMember(teamId, memberName);
+                                if (result.success) {
+                                    showToast(`${memberName} a été retiré de l'équipe`);
+                                    UIManager.renderTeamDetails(teamId);
+                                } else {
+                                    showToast(result.message, true);
+                                }
+                            });
+                        });
+                    }
+                    
+                    // Configurer le bouton d'ajout de membre
+                    const addMemberBtn = document.getElementById('addMemberBtn');
+                    const addMemberInput = document.getElementById('addMemberInput');
+                    
+                    addMemberBtn.onclick = function() {
+                        const memberName = addMemberInput.value.trim();
+                        if (!memberName) {
+                            showToast("Veuillez entrer un nom", true);
+                            return;
+                        }
+                        
+                        const result = TeamManager.addMember(teamId, memberName);
+                        if (result.success) {
+                            showToast(`${memberName} a été ajouté à l'équipe`);
+                            addMemberInput.value = '';
+                            UIManager.renderTeamDetails(teamId);
+                        } else {
+                            showToast(result.message, true);
+                        }
+                    };
+                    
+                    // Afficher la section
+                    document.getElementById('teamDetail').dataset.teamId = teamId;
+                    this.showSection('teamDetail');
+                }
+                
+                static renderEventDetails(eventId) {
+                    const event = EventManager.get(eventId);
+                    if (!event) return;
+                    
+                    // Remplir les informations de base
+                    document.getElementById('detailEventName').textContent = event.name;
+                    document.getElementById('detailEventType').textContent = event.type === 'five' ? 'Five' : 'Tournoi';
+                    document.getElementById('detailPlayersPerTeam').textContent = event.playersPerTeam || '-';
+                    document.getElementById('detailEventDate').textContent = this.formatDate(event.date);
+                    document.getElementById('detailEventTime').textContent = event.time;
+                    document.getElementById('detailEventLocation').textContent = event.location;
+                    
+                    // Remplir la liste des équipes
+                    const teamsList = document.getElementById('eventTeamsList');
+                    teamsList.innerHTML = '';
+                    
+                    if (!event.teams || event.teams.length === 0) {
+                        teamsList.innerHTML = '<p>Aucune équipe inscrite.</p>';
+                    } else {
+                        event.teams.forEach(teamId => {
+                            const team = TeamManager.get(teamId);
+                            if (team) {
+                                const li = document.createElement('li');
+                                li.innerHTML = `
+                                    <div class="name">${team.name}</div>
+                                    <div>${team.members.length} joueurs</div>
+                                `;
+                                teamsList.appendChild(li);
+                            }
+                        });
+                    }
+                    
+                    // Simuler les prévisions météo
+                    WeatherAPI.getForecast({latitude: 48.8566, longitude: 2.3522})
+                        .then(forecast => {
+                            const icon = forecast.icon || 'cloud-sun';
+                            const weatherForecast = document.getElementById('weatherForecast');
+                            
+                            weatherForecast.innerHTML = `
+                                <div class="weather-icon">
+                                    <i class="fas fa-${icon} fa-3x"></i>
+                                </div>
+                                <div class="weather-temp">${forecast.temperature}°C</div>
+                                <div class="weather-desc">${forecast.description}</div>
+                                <div class="weather-info">
+                                    <span><i class="fas fa-wind"></i> ${forecast.windSpeed} km/h</span>
+                                    <span><i class="fas fa-tint"></i> ${forecast.precipitation}mm</span>
+                                </div>
+                                <div class="weather-playability mt-16">
+                                    ${forecast.isPlayable() ? 
+                                        '<span class="status-active">Conditions favorables</span>' : 
+                                        '<span class="status-pending">Conditions difficiles</span>'
+                                    }
+                                </div>
+                            `;
+                        });
+                    
+                    // Afficher la section
+                    document.getElementById('eventDetails').dataset.eventId = eventId;
+                    this.showSection('eventDetails');
+                }
+                
+                // Autres méthodes de rendu...
+            }
+            
+            // Initialiser l'application
+            UIManager.init();
+            
+            // Gérer l'actualisation de l'application
+            window.addEventListener('popstate', function() {
+                const hash = window.location.hash.substring(1);
+                if (hash && document.getElementById(hash)) {
+                    UIManager.showSection(hash);
+                }
+            });
+            
+            // Gestionnaire de toast global
+            function showToast(message, isError = false, duration = 3000) {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = isError ? 'toast error show' : 'toast show';
+                
+                setTimeout(() => {
+                    toast.className = 'toast';
+                }, duration);
+            }
+            
+            // Vérifier les notifications toutes les 5 minutes
+            setInterval(() => {
+                NotificationManager.checkReminders();
+            }, 300000);
+            
+            // Service Worker pour le mode hors-ligne
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker enregistré avec succès:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Échec de l\'enregistrement du Service Worker:', error);
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
+
